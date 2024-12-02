@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Веселая комната</title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background: linear-gradient(to bottom, #ff9bff, #ff6c9d);
+      color: #fff;
+      text-align: center;
+      padding: 20px;
+      margin: 0;
+      overflow: hidden;
+    }
+    h1 {
+      font-size: 3em;
+      color: #f39c12;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      animation: bounce 1s infinite;
+    }
+    @keyframes bounce {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-20px);
+      }
+    }
+    .joke {
+      font-size: 1.5em;
+      margin-top: 20px;
+      color: #2ecc71;
+      animation: fadeIn 2s ease-in-out;
+    }
+    .joke p {
+      margin: 10px;
+    }
+    .fun-image {
+      margin-top: 30px;
+      width: 50%;
+      animation: scaleUp 1.5s ease-in-out;
+    }
+    @keyframes scaleUp {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .button {
+      background-color: #f39c12;
+      color: white;
+      padding: 15px 30px;
+      font-size: 20px;
+      border: none;
+      border-radius: 10px;
+      margin-top: 30px;
+      cursor: pointer;
+    }
+    .button:hover {
+      background-color: #e67e22;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Добро пожаловать в веселую комнату!</h1>
+
+  <div class="joke">
+    <p>Знаешь, почему снеговик всегда улыбается? Потому что у него ледяной характер!</p>
+    <p>Почему елки никогда не спорят? Потому что у них всегда есть вершина!</p>
+  </div>
+
+  <img class="fun-image" src="https://media.giphy.com/media/xT0BKg5wLlTzqzIuJu/giphy.gif" alt="Веселая картинка">
+
+  <button class="button" onclick="alert('Ты супер! Хорошего настроения!')">Получить поздравление!</button>
+
+  <script>
+    // Добавление случайной шутки при каждом обновлении страницы
+    const jokes = [
+      "Почему снеговик всегда улыбается? Потому что у него ледяной характер!",
+      "Почему елки никогда не спорят? Потому что у них всегда есть вершина!",
+      "Какой фрукт поет на Новый год? Мандарин! 🥭",
+      "Почему мыши не любят Новый год? Потому что для них это всегда крыс-мусор!"
+    ];
+
+    function showRandomJoke() {
+      const randomJoke = jokes[Math.floor(Math.random() * jokes.length)];
+      document.querySelector(".joke").innerHTML = `<p>${randomJoke}</p>`;
+    }
+
+    // Вставляем случайную шутку при загрузке страницы
+    showRandomJoke();
+  </script>
+
+</body>
+</html>

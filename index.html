@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Новогодний квест</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom, #1e3c72, #2a5298);
+      color: white;
+      text-align: center;
+      padding: 20px;
+      margin: 0;
+      overflow-x: hidden;
+    }
+    .snowflake {
+      position: fixed;
+      top: -10px;
+      color: white;
+      font-size: 20px;
+      animation: fall 10s linear infinite;
+    }
+    @keyframes fall {
+      0% {
+        transform: translateY(-10px);
+      }
+      100% {
+        transform: translateY(110vh);
+      }
+    }
+    h1 {
+      font-size: 3em;
+      margin-top: 20px;
+    }
+    .nav-btn {
+      display: inline-block;
+      margin: 20px;
+      padding: 15px 30px;
+      font-size: 20px;
+      text-decoration: none;
+      border-radius: 5px;
+      background: #f39c12;
+      color: white;
+      transition: background 0.3s;
+    }
+    .nav-btn:hover {
+      background: #e67e22;
+    }
+    .image-container {
+      margin: 20px auto;
+      width: 80%;
+    }
+    img {
+      max-width: 100%;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Добро пожаловать в Новогодний квест!</h1>
+  <div class="image-container">
+    <img src="/img/Новый год.webp/" width="800" height="800" alt="Новогодняя картинка">
+  </div>
+  <a href="quest.html" class="nav-btn">Начать квест</a>
+  <a href="info.html" class="nav-btn">Подробнее о празднике</a>
+  <a href="fun.html" class="nav-btn">Весёлая комната</a>
+</body>
+<script>
+  // Создаём эффект снежинок
+  function createSnowflakes() {
+    for (let i = 0; i < 30; i++) {
+      const snowflake = document.createElement("div");
+      snowflake.className = "snowflake";
+      snowflake.style.left = Math.random() * 100 + "vw";
+      snowflake.style.fontSize = Math.random() * 10 + 10 + "px";
+      snowflake.style.animationDuration = Math.random() * 3 + 7 + "s";
+      snowflake.textContent = "❄";
+      document.body.appendChild(snowflake);
+      snowflake.addEventListener("animationend", () => snowflake.remove());
+    }
+  }
+  setInterval(createSnowflakes, 500);
+</script>
+</html>
+
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Квест: Новый Год</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom, #2a5298, #1e3c72);
+      color: white;
+      text-align: center;
+      margin: 0;
+      overflow-x: hidden;
+      padding: 20px;
+    }
+    h1 {
+      font-size: 3em;
+      animation: fadeIn 2s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .button-container {
+      margin-top: 50px;
+    }
+    .button {
+      background-color: #f39c12;
+      color: white;
+      padding: 20px;
+      font-size: 20px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      margin: 10px;
+      transition: background-color 0.3s;
+    }
+    .button:hover {
+      background-color: #e67e22;
+    }
+  </style>
+</head>
+<body>

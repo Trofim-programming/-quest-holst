@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Квест: Новый Год</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom, #2a5298, #1e3c72);
+      color: white;
+      text-align: center;
+      padding: 20px;
+      margin: 0;
+      overflow: hidden;
+      transition: background 1s;
+    }
+    h1 {
+      font-size: 3em;
+    }
+    .task-container {
+      margin: 20px auto;
+      padding: 20px;
+      border: 2px solid white;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.1);
+      animation: fadeIn 1s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    #progress {
+      margin: 20px 0;
+      height: 20px;
+      width: 80%;
+      background: #ddd;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    #progress-bar {
+      height: 100%;
+      width: 0;
+      background: #4caf50;
+      transition: width 0.5s;
+    }
+    input {
+      padding: 10px;
+      font-size: 16px;
+      border: 2px solid white;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      background: #f39c12;
+      color: white;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    button:hover {
+      background: #e67e22;
+    }
+    #success {
+      display: none;
+      font-size: 24px;
+      color: #2ecc71;
+    }
+    #timer {
+      font-size: 1.2em;
+      color: #e74c3c;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Новогодний квест</h1>
+  <div id="progress">
+    <div id="progress-bar"></div>
+  </div>
+  <div id="timer">Время: 60 секунд</div>
+  <div class="task-container">
+    <p id="task-question">...</p>
+    <input type="text" id="task-input" placeholder="Ваш ответ...">
+    <button id="submit-btn">Ответить</button>
+  </div>
+  <div id="success">Поздравляем! Вы прошли квест!</div>
+  <button id="restart-btn" style="display:none;" onclick="location.href='index.html'">Пройти снова</button>
+
+  <audio id="correct-sound" src="https://www.soundjay.com/button/beep-07.mp3"></audio>
+  <audio id="wrong-sound" src="https://www.soundjay.com/button/beep-10.mp3"></audio>
+
+  <script>
+    const tasks = [
+      { question: "Сколько дней в декабре?", answer: "31" },
+      { question: "Как зовут оленя с красным носом?", answer: "Рудольф" },
+      { question: "Какой праздник отмечают 1 января?", answer: "Новый год" },
+      { question: "Что приносит Дед Мороз на Новый Год?", answer: "Подарки" },
+      { question: "Какая страна первой встречает Новый год?", answer: "Кирибати" },
+      { question: "Как зовут внучку Деда Мороза?", answer: "Снегурочка" },
+      { question: "Что вешают на новогоднюю ёлку?", answer: "Игрушки" },
+      { question: "Какой месяц начинается после декабря?", answer: "Январь" },
+      { question: "Какой цвет носа у Рудольфа?", answer: "Красный" },
+      { question: "Как называют песню «Jingle Bells» по-русски?", answer: "Звон колокольчиков" }
+    ];
+
+    const taskContainer = document.querySelector(".task-container");
+    const taskQuestion = document.getElementById("task-question");
+    const taskInput = document.getElementById("task-input");
+    const submitBtn = document.getElementById("submit-btn");
+    const progressBar = document.getElementById("progress-bar");
+    const timerDisplay = document.getElementById("timer");
+    const successMessage = document.getElementById("success");
+    const restartBtn = document.getElementById("restart-btn");
+    const correctSound = document.getElementById("correct-sound");
+    const wrongSound = document.getElementById("wrong-sound");
+
+    let currentTask = 0;
+    let timer = 60;
+    let interval;
+
+    function startTimer() {
+      clearInterval(interval);
+      timer = 60;
+      timerDisplay.textContent = `Время: ${timer} секунд`;
+      interval = setInterval(() => {
+        timer--;
+        timerDisplay.textContent = `Время: ${timer} секунд`;
+        if (timer === 0) {
+          clearInterval(interval);
+          alert("Время вышло! Попробуйте снова.");
+          restartGame();
+        }
+      }, 1000);
+    }
+
+    function updateTask() {
+      if (currentTask < tasks.length) {
+        taskQuestion.textContent = tasks[currentTask].question;
+        taskInput.value = "";
+        progressBar.style.width = `${((currentTask) / tasks.length) * 100}%`;
+        startTimer();
+      } else {
+        endGame();
+      }
+    }
+
+    function endGame() {
+      clearInterval(interval);
+      taskContainer.style.display = "none";
+      successMessage.style.display = "block";
+      restartBtn.style.display = "block";
+    }
+
+    function restartGame() {
+      currentTask = 0;
+      taskContainer.style.display = "block";
+      successMessage.style.display = "none";
+      restartBtn.style.display = "none";
+      updateTask();
+    }
+
+    submitBtn.addEventListener("click", () => {
+      const userAnswer = taskInput.value.trim().toLowerCase();
+      if (userAnswer === tasks[currentTask].answer.toLowerCase()) {
+        correctSound.play();
+        currentTask++;
+        updateTask();
+      } else {
+        wrongSound.play();
+        alert("Неправильный ответ! Попробуйте снова.");
+      }
+    });
+
+    restartBtn.addEventListener("click", restartGame);
+
+    updateTask();
+  </script>
+</body>
+</html>

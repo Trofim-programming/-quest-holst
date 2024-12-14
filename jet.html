@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Поймай Гринча!</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: linear-gradient(to bottom, #1e3c72, #2a5298);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      color: white;
+    }
+
+    h1 {
+      margin: 20px 0;
+      font-size: 2.5em;
+    }
+
+    #game-area {
+      width: 90%;
+      height: 60vh;
+      background-color: #f0f8ff;
+      border: 3px solid #ffffff;
+      border-radius: 10px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .grinch {
+      width: 100px;
+      height: 100px;
+      background: url('https://media.giphy.com/media/xT5LMQ4KwJgY6FHFDG/giphy.gif') no-repeat center;
+      background-size: cover;
+      position: absolute;
+      cursor: pointer;
+      animation: spin 0.5s infinite linear;
+    }
+
+    @keyframes spin {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    #score, #timer {
+      font-size: 1.5em;
+      margin-top: 10px;
+    }
+
+    #start-button {
+      background-color: #f39c12;
+      color: white;
+      padding: 15px 30px;
+      font-size: 20px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+
+    #start-button:hover {
+      background-color: #e67e22;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Поймай Гринча!</h1>
+  <div id="game-area">
+    <div class="grinch" id="grinch"></div>
+  </div>
+  <div id="score">Счет: 0</div>
+  <div id="timer">Время: 30 секунд</div>
+  <button id="start-button">Начать игру</button>
+
+  <script>
+    const grinch = document.getElementById('grinch');
+    const gameArea = document.getElementById('game-area');
+    const scoreDisplay = document.getElementById('score');
+    const timerDisplay = document.getElementById('timer');
+    const startButton = document.getElementById('start-button');
+
+    let score = 0;
+    let timeLeft = 30;
+    let gameActive = false;
+    let timer, grinchTimer;
+    let grinchSpeed = 1000; // Начальная скорость движения Гринча (мс)
+
+    // Функция для размещения Гринча в случайной позиции
+    function moveGrinch() {
+      const areaWidth = gameArea.offsetWidth;
+      const areaHeight = gameArea.offsetHeight;
+      const grinchWidth = grinch.offsetWidth;
+      const grinchHeight = grinch.offsetHeight;
+
+      const randomX = Math.random() * (areaWidth - grinchWidth);
+      const randomY = Math.random() * (areaHeight - grinchHeight);
+
+      grinch.style.left = `${randomX}px`;
+      grinch.style.top = `${randomY}px`;
+    }
+
+    // Обновление таймера
+    function updateTimer() {
+      if (timeLeft > 0) {
+        timeLeft--;
+        timerDisplay.textContent = `Время: ${timeLeft} секунд`;
+      } else {
+        endGame();
+      }
+    }
+
+    // Обработчик клика на Гринча
+    grinch.addEventListener('click', () => {
+      if (!gameActive) return;
+
+      score++;
+      scoreDisplay.textContent = `Счет: ${score}`;
+
+      // Уровень сложности — ускоряем Гринча после 10 очков
+      if (score === 10) {
+        grinchSpeed = 500; // Ускорение
+        clearInterval(grinchTimer);
+        grinchTimer = setInterval(moveGrinch, grinchSpeed);
+      }
+
+      // Приз за 20 очков
+      if (score === 20) {
+        alert("Поздравляем! Вы поймали 20 Гринчей! 🎁");
+        endGame();
+      }
+
+      moveGrinch();
+    });
+
+    // Запуск игры
+    function startGame() {
+      score = 0;
+      timeLeft = 30;
+      grinchSpeed = 1000; // Сброс скорости
+      gameActive = true;
+
+      scoreDisplay.textContent = `Счет: ${score}`;
+      timerDisplay.textContent = `Время: ${timeLeft} секунд`;
+      startButton.style.display = 'none';
+      grinch.style.display = 'block';
+
+      moveGrinch();
+      grinchTimer = setInterval(moveGrinch, grinchSpeed);
+      timer = setInterval(updateTimer, 1000);
+    }
+
+    // Завершение игры
+    function endGame() {
+      gameActive = false;
+      clearInterval(timer);
+      clearInterval(grinchTimer);
+      grinch.style.display = 'none';
+      startButton.style.display = 'block';
+      alert(`Игра окончена! Ваш итоговый счет: ${score}`);
+    }
+
+    // Обработчик нажатия кнопки "Начать игру"
+    startButton.addEventListener('click', startGame);
+  </script>
+
+</body>
+</html>
